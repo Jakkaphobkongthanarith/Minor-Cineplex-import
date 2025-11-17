@@ -3,13 +3,13 @@ const { Pool } = pg.default;
 import "dotenv/config";
 
 const connectionPool = new Pool({
-  // connectionString: process.env.DB_POSTGRES,
-  //   postgresql://postgres.igggdymrgqaaedtkkmre:[YOUR-PASSWORD]@aws-0-ap-southeast-1.pooler.supabase.com:6543/postgres
-  user: process.env.DB_POSTGRES_USER,
-  host: "aws-0-ap-southeast-1.pooler.supabase.com",
-  database: "postgres",
-  password: process.env.DB_POSTGRES_PASSWORD,
-  port: "6543",
+  connectionString: process.env.DATABASE_URL,
 });
+console.log("connectionPool", connectionPool);
+
+connectionPool
+  .query("SELECT NOW()")
+  .then((res) => console.log("DB Connected:", res.rows))
+  .catch((err) => console.error("DB Connection Error:", err));
 
 export default connectionPool;

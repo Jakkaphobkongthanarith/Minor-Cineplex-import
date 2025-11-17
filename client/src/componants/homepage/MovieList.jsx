@@ -81,7 +81,7 @@ function MovieList() {
           </div>
         ) : (
           <div className="grid grid-cols-2 h-fit xl:grid-cols-4 gap-[20px]">
-            {movies.length > 0 ? (
+            {Array.isArray(movies) && movies.length > 0 ? (
               movies.map((data) => {
                 const releaseDate = new Date(data.theatrical_release);
                 const formattedDate = releaseDate.toISOString().split("T")[0];
@@ -114,16 +114,18 @@ function MovieList() {
                     </div>
                     <div className="flex flex-col md:flex-row md:gap-[10px] gap-[5px] ">
                       <div className="grid gap-[8px] w-fit grid-cols-2 md:flex md:flex-row text-center">
-                        {data.genres.map((genre) => {
-                          return (
-                            <div
-                              className=" items-center md:w-fit rounded-[4px] text-gray-300 bg-gray-100 px-[6px] py-[6px] text-[14px]"
-                              key={genre}
-                            >
-                              {genre}
-                            </div>
-                          );
-                        })}
+                        {Array.isArray(data.genres)
+                          ? data.genres.map((genre) => {
+                              return (
+                                <div
+                                  className=" items-center md:w-fit rounded-[4px] text-gray-300 bg-gray-100 px-[6px] py-[6px] text-[14px]"
+                                  key={genre}
+                                >
+                                  {genre}
+                                </div>
+                              );
+                            })
+                          : null}
                         <div className="h-[32px] w-fit rounded-[4px] text-gray-400 bg-gray-100 px-[12px] py-[6px] text-[14px]">
                           {data.language}
                         </div>
