@@ -27,7 +27,6 @@ function BookingHistory(props) {
   const myReview = props.review;
   const profile = props.profile;
   const today = moment();
-  console.log("today:", today);
   const navigate = useNavigate();
 
   // console.log(history);
@@ -433,14 +432,22 @@ function BookingHistory(props) {
           (rate) =>
             rate.movie_id === movie.movie_id && rate.user_id === movie.user_id
         );
-        const bookingDate = new Date(movie.select_date);
+        const bookingDate = moment(movie.select_date);
         const bookingMinutes = toMinutes(movie.time);
         const currentMinutes = today.hours() * 60 + today.minutes();
+        const isToday = today.isSame(bookingDate, 'day');
+        const isPastShowtime = isToday
+          ? currentMinutes > bookingMinutes
+          : today.isAfter(bookingDate, 'day');
         console.log(
           "bookingMinutes:",
           bookingMinutes,
           "currentMinutes:",
-          currentMinutes
+          currentMinutes,
+          "isToday:",
+          isToday,
+          "isPastShowtime:",
+          isPastShowtime
         );
         return (
           <div className="flex flex-col w-full xl:w-[691px]" key={index}>
@@ -517,13 +524,9 @@ function BookingHistory(props) {
                   </div>
                 </div>
               </div>
-              {(today > new Date(movie.select_date) &&
+              {(isPastShowtime &&
                 !reviewExists &&
-                movie.payment_status === "success") ||
-              (today.getTime() === bookingDate.getTime() &&
-                !reviewExists &&
-                movie.payment_status === "success" &&
-                currentTime > movie.time - 1) ? (
+                movie.payment_status === "success") ? (
                 <div className="flex items-center justify-end gap-[8px]">
                   <button
                     className="underline text-white font-bold"

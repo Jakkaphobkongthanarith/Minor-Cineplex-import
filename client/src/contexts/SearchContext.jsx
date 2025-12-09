@@ -8,6 +8,15 @@ export function useSearch() {
 }
 
 export function formatDate(date) {
+  if (date && typeof date === "object" && typeof date.toDate === "function") {
+    date = date.toDate();
+  }
+  if (typeof date === "string") {
+    date = new Date(date);
+  }
+  if (!(date instanceof Date) || isNaN(date)) {
+    return "";
+  }
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, "0");
   const day = String(date.getDate()).padStart(2, "0");
