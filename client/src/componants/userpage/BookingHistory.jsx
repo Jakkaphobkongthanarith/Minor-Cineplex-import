@@ -2,6 +2,7 @@ import axios from "axios";
 import { useState } from "react";
 import { formatDate } from "../../contexts/SearchContext";
 import { useNavigate } from "react-router-dom";
+import moment from "moment";
 import {
   TwitterShareButton,
   XIcon,
@@ -25,7 +26,8 @@ function BookingHistory(props) {
   const history = props.user;
   const myReview = props.review;
   const profile = props.profile;
-  const today = new Date(formatDate(new Date()));
+  const today = moment();
+  console.log("today:", today);
   const navigate = useNavigate();
 
   // console.log(history);
@@ -408,6 +410,11 @@ function BookingHistory(props) {
       </div>
     );
   };
+  function toMinutes(timeStr) {
+    const [h, m] = timeStr.split(":").map(Number);
+    return h * 60 + m;
+  }
+
   return (
     <div
       className="flex flex-col gap-[24px] px-[0px] sm:px-[20%] md:px-[5%] lg:pl-[5%] lg:pr-[10px]"
@@ -427,7 +434,14 @@ function BookingHistory(props) {
             rate.movie_id === movie.movie_id && rate.user_id === movie.user_id
         );
         const bookingDate = new Date(movie.select_date);
-
+        const bookingMinutes = toMinutes(movie.time);
+        const currentMinutes = today.hours() * 60 + today.minutes();
+        console.log(
+          "bookingMinutes:",
+          bookingMinutes,
+          "currentMinutes:",
+          currentMinutes
+        );
         return (
           <div className="flex flex-col w-full xl:w-[691px]" key={index}>
             <div className="flex flex-col  text-white px-[16px] pb-[24px] pt-[16px] gap-[24px] bg-gray-0 rounded-[8px]">
