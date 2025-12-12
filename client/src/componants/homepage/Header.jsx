@@ -1,8 +1,11 @@
 import { useNavigate } from "react-router-dom";
 import { useSearch } from "../../contexts/SearchContext";
+import { useEffect } from "react";
 
 function Header() {
   const {
+    moviesList,
+    getMoviesList,
     citySearch,
     setCitySearch,
     titleSearch,
@@ -16,6 +19,10 @@ function Header() {
   } = useSearch();
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    getMoviesList();
+  }, []);
 
   const createQueryParams = () => {
     const queryParams = new URLSearchParams();
@@ -53,15 +60,11 @@ function Header() {
             name="movie"
           >
             <option value="">Movie</option>
-            <option>The Dark Knight</option>
-            <option>Django Unchained</option>
-            <option>DUNE: Part Two</option>
-            <option>Interstellar</option>
-            <option>La La Land</option>
-            <option>Pee Mak</option>
-            <option>Death Whisperer</option>
-            <option>Godzilla x Kong</option>
-            <option>Demon Slayer</option>
+            {moviesList.map((movie, index) => (
+              <option key={index} value={movie.title}>
+                {movie.title}
+              </option>
+            ))}
           </select>
 
           <select

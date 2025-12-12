@@ -11,6 +11,8 @@ import Pagination from "@mui/material/Pagination";
 function SearchResultPage() {
   const {
     search,
+    moviesList,
+    getMoviesList,
     citySearch,
     setCitySearch,
     titleSearch,
@@ -38,6 +40,7 @@ function SearchResultPage() {
   const itemsPerPage = 10;
 
   useEffect(() => {
+    getMoviesList();
     getDataSearch();
   }, []);
 
@@ -212,15 +215,11 @@ function SearchResultPage() {
               name="movie"
             >
               <option value="">Movie</option>
-              <option>The Dark Knight</option>
-              <option>Django Unchained</option>
-              <option>DUNE: Part Two</option>
-              <option>Interstellar</option>
-              <option>La La Land</option>
-              <option>Pee Mak</option>
-              <option>Death Whisperer</option>
-              <option>Godzilla x Kong</option>
-              <option>Demon Slayer</option>
+              {moviesList.map((movie, index) => (
+                <option key={index} value={movie.title}>
+                  {movie.title}
+                </option>
+              ))}
             </select>
 
             <select

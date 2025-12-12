@@ -27,6 +27,7 @@ export function SearchProvider({ children }) {
   const currentDate = new Date();
   const toDay = formatDate(currentDate);
   const [search, setSearch] = useState([]);
+  const [moviesList, setMoviesList] = useState([]);
   const [citySearch, setCitySearch] = useState("");
   const [titleSearch, setTitleSearch] = useState("");
   const [languageSearch, setLanguageSearch] = useState("");
@@ -44,6 +45,18 @@ export function SearchProvider({ children }) {
     setDateSearch(formatDate(new Date()));
     setTagsSearch([]);
     setNoResults(false);
+  };
+
+  const getMoviesList = async () => {
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_SERVER_URL}/movies/release`
+      );
+      setMoviesList(response.data.data || []);
+    } catch (error) {
+      console.error("Error fetching movies list:", error);
+      setMoviesList([]);
+    }
   };
 
   const getDataSearch = async () => {
@@ -89,6 +102,8 @@ export function SearchProvider({ children }) {
       value={{
         toDay,
         search,
+        moviesList,
+        getMoviesList,
         citySearch,
         setCitySearch,
         titleSearch,
